@@ -14,6 +14,8 @@ spring:
     hibernate:
       ddl-auto: create-drop
       show-sql: true
+  rabbitmq:
+    addresses: localhost:5672
 
 eureka:
   client:
@@ -23,3 +25,16 @@ eureka:
     register-with-eureka: true
 server:
   port: 8083
+
+management:
+  tracing:
+    sampling:
+      probability: 0.5
+
+rabbitmq:
+  exchanges:
+    internal : internal.exchange
+  queues:
+    notification: notification.queue
+  routing-keys:
+    internal-notification: internal.notification.routing-key

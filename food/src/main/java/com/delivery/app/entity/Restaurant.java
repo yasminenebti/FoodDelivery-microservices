@@ -26,6 +26,6 @@ public class Restaurant {
     private Integer phoneNumber;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "restaurant" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restaurant" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<FoodItem> foodItemList = new ArrayList<>();
 }

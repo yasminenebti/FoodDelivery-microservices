@@ -24,7 +24,7 @@ public class Category {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category" , cascade = CascadeType.ALL , fetch = FetchType.EAGER)
     private List<FoodItem> foodItemList = new ArrayList<>();
 
 

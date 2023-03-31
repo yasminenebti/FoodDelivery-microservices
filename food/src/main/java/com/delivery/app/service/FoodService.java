@@ -4,7 +4,7 @@ import com.delivery.app.dto.FoodRequest;
 import com.delivery.app.entity.Category;
 import com.delivery.app.entity.FoodItem;
 import com.delivery.app.entity.Restaurant;
-import com.delivery.app.food.FoodItemResponse;
+import com.delivery.clients.food.FoodItemResponse;
 import com.delivery.app.repository.FoodRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

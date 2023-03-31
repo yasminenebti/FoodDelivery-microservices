@@ -17,6 +17,14 @@ spring:
     hibernate:
       ddl-auto: create-drop
       show-sql: true
+  rabbitmq:
+    addresses: localhost:5672
+
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
 
 
 eureka:
