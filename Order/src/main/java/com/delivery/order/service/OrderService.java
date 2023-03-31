@@ -1,6 +1,6 @@
 package com.delivery.order.service;
 
-import com.delivery.amqp.RabbitMqMessageProducer;
+import com.delivery.app.amqp.RabbitMqMessageProducer;
 import com.delivery.order.dto.OrderItemsRequest;
 import com.delivery.order.dto.OrderRequest;
 import com.delivery.order.entity.Order;
@@ -27,13 +27,12 @@ public class OrderService {
     private final FoodClient foodClient;
 
     private final RabbitMqMessageProducer rabbitMqMessageProducer;
-
     @Autowired
-    public OrderService(OrderRepository orderRepository, NotificationClient notificationClient, FoodClient foodClient, RabbitMqMessageProducer rabbitMqMessageProducer) {
+    public OrderService(OrderRepository orderRepository, NotificationClient notificationClient, FoodClient foodClient, RabbitMqMessageProducer rabbitMqMessageProducer, RabbitMqMessageProducer rabbitMqMessageProducer1) {
         this.orderRepository = orderRepository;
         this.notificationClient = notificationClient;
         this.foodClient = foodClient;
-        this.rabbitMqMessageProducer = rabbitMqMessageProducer;
+        this.rabbitMqMessageProducer = rabbitMqMessageProducer1;
     }
 
     public void addOrder(OrderRequest orderRequest){

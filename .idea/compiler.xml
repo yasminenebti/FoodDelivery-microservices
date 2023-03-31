@@ -10,13 +10,14 @@
         <module name="Order" />
         <module name="notification" />
         <module name="clients" />
-        <module name="amqp" />
         <module name="api-gateway" />
         <module name="eureka-server" />
+        <module name="rabbitmq" />
         <module name="food" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="amqp" target="17" />
       <module name="Food" target="17" />
       <module name="stock" target="17" />
     </bytecodeTargetLevel>

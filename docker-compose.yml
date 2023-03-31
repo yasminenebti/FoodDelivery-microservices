@@ -4,7 +4,7 @@ services:
     image: postgres
     environment:
       POSTGRES_USER: delivery
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: please
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
@@ -38,9 +38,6 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-
-
-
 
 networks:
   postgres:

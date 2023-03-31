@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/notification
     username: delivery
-    password: password
+    password: passfinal
 
   jpa:
     properties:
@@ -34,7 +34,7 @@ management:
 rabbitmq:
   exchanges:
     internal : internal.exchange
-  queues:
+  queue:
     notification: notification.queue
   routing-keys:
     internal-notification: internal.notification.routing-key

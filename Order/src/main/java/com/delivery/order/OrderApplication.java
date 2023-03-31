@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = {
         "com.delivery.order",
-        "com.delivery.amqp"
+        "com.delivery.app.amqp"
 })
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = "com.delivery.clients")

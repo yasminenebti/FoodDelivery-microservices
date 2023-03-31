@@ -1,0 +1,4 @@
+com\delivery\clients\notification\NotificationRequest.class
+com\delivery\clients\food\FoodClient.class
+com\delivery\clients\food\FoodItemResponse.class
+com\delivery\clients\notification\NotificationClient.class

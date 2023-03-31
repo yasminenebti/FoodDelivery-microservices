@@ -13,16 +13,13 @@
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
   <modules>
-    <module>Food</module>
     <module>food</module>
     <module>Order</module>
-
-      <module>eureka-server</module>
+    <module>eureka-server</module>
     <module>clients</module>
-      <module>notification</module>
     <module>notification</module>
     <module>api-gateway</module>
-      <module>amqp</module>
+    <module>rabbitmq</module>
   </modules>
 
   <properties>
