@@ -37,4 +37,21 @@ public class OrderController {
         String address = requestBody.get("address");
         return  orderService.checkOut(orderId,address);}
 
+    @PutMapping("/{orderId}/increase/{item}")
+    @ResponseStatus(HttpStatus.OK)
+    public Order increaseItemQuantity(
+            @PathVariable("orderId") Integer orderId,
+            @PathVariable("item") Integer item
+    ) {
+        return orderService.increaseQuantity(orderId,item);
+    }
+
+    @PutMapping("/{orderId}/decrease/{item}")
+    @ResponseStatus(HttpStatus.OK)
+    public Order decreaseItemQuantity(
+            @PathVariable("orderId") Integer orderId,
+            @PathVariable("item") Integer item
+    ) {
+        return orderService.decreaseQuantity(orderId,item);
+    }
 }
