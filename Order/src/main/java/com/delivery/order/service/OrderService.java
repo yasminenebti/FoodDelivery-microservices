@@ -2,7 +2,6 @@ package com.delivery.order.service;
 
 import com.delivery.app.amqp.RabbitMqMessageProducer;
 import com.delivery.order.dto.OrderItemsRequest;
-import com.delivery.order.dto.OrderRequest;
 import com.delivery.order.entity.Order;
 import com.delivery.order.entity.OrderItems;
 import com.delivery.order.entity.OrderStatus;
@@ -13,10 +12,13 @@ import com.delivery.order.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class OrderService {
+
+    private Order currentOrder;
     private final OrderRepository orderRepository;
     private final FoodClient foodClient;
     private final RabbitMqMessageProducer rabbitMqMessageProducer;
@@ -25,24 +27,20 @@ public class OrderService {
         this.orderRepository = orderRepository;
         this.foodClient = foodClient;
         this.rabbitMqMessageProducer = rabbitMqMessageProducer1;
+        this.currentOrder=null;
     }
 
-    public void addOrder(OrderRequest orderRequest){
-        Order order = new Order();
+    public void addOrder(OrderItemsRequest orderItemsRequest){
 
-        List<OrderItems> orderItems = orderRequest.getOrderItemsRequests().stream()
-                .map(this::mapToOrderItems)
-                .toList(); //this is a lambda function replacing orderItemsRequest that maps into the function
+        currentOrder = (currentOrder == null) ? new Order() : currentOrder;
+        if (currentOrder.getOrderItems() == null) { currentOrder.setOrderItems(new ArrayList<>());}
+        OrderItems orderItems = mapToOrderItems(orderItemsRequest);
+        currentOrder.getOrderItems().add(orderItems);
 
-        order.setOrderItems(orderItems);
-
-        double total = orderItems.stream()
-                .mapToDouble(this::mapToTotalOrderItems).sum();
-
-        order.setTotal(total);
-        order.setLocalDateTime(LocalDateTime.now());
-        order.setOrderStatus(OrderStatus.RECEIVED);
-        orderRepository.save(order);
+        currentOrder.setTotal(currentOrder.getOrderItems().stream().mapToDouble(this::mapToTotalOrderItems).sum());
+        currentOrder.setLocalDateTime(LocalDateTime.now());
+        currentOrder.setOrderStatus(OrderStatus.RECEIVED);
+        orderRepository.save(currentOrder);
     }
 
     private double mapToTotalOrderItems(OrderItems orderItems) {
@@ -94,15 +92,16 @@ public class OrderService {
         return order;
     }
 
-    public Order checkOut(Integer orderId , String address){
-        Order order = orderRepository.findById(orderId).orElseThrow(()-> new IllegalArgumentException("order not found"));
-        order.setAddress(address);
-        orderRepository.saveAndFlush(order);
+    public Order checkOut(String address){
+        if (currentOrder == null) { throw new IllegalStateException("no order available");}
+        currentOrder.setAddress(address);
+        currentOrder.setIsCheckout(true);
+        orderRepository.saveAndFlush(currentOrder);
 
         NotificationRequest notificationRequest =
                 new NotificationRequest(
-                        order.getId(),
-                        String.format("New Order with Id" + orderId + "is placed successfully")
+                        currentOrder.getId(),
+                        String.format("New Order with Id" + currentOrder.getId() + "is placed successfully")
                 );
 
         rabbitMqMessageProducer.publish(
@@ -110,7 +109,10 @@ public class OrderService {
                 "internal.exchange",
                 "internal.notification.routing-key"
         );
-        return order;
+        Order checkoutOrder = currentOrder;
+        currentOrder = null;
+        return checkoutOrder;
+
     }
 
 

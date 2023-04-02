@@ -33,5 +33,7 @@ public class Order {
 
     private String address;
 
+    private Boolean isCheckout ;
+
 
 }

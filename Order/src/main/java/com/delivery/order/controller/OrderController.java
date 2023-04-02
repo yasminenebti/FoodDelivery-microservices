@@ -1,6 +1,6 @@
 package com.delivery.order.controller;
 
-import com.delivery.order.dto.OrderRequest;
+import com.delivery.order.dto.OrderItemsRequest;
 import com.delivery.order.entity.Order;
 import com.delivery.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addOrder(@RequestBody OrderRequest orderRequest){
-          orderService.addOrder(orderRequest);
+    public void addOrder(@RequestBody OrderItemsRequest orderItemsRequest){
+          orderService.addOrder(orderItemsRequest);
     }
 
     @GetMapping
@@ -28,14 +28,13 @@ public class OrderController {
         return orderService.getAll();
     }
 
-    @PutMapping("/{orderId}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public Order checkout(
-            @PathVariable("orderId") Integer orderId,
             @RequestBody Map<String, String> requestBody
     ) {
         String address = requestBody.get("address");
-        return  orderService.checkOut(orderId,address);}
+        return  orderService.checkOut(address);}
 
     @PutMapping("/{orderId}/increase/{item}")
     @ResponseStatus(HttpStatus.OK)
