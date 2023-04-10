@@ -1,11 +1,14 @@
+server:
+  port: 8085
 
 spring:
   application:
-    name: notification
+    name: Order
   datasource:
-    url: jdbc:postgresql://localhost:5432/notification
+    url: jdbc:postgresql://localhost:5432/users
     username: delivery
     password: passfinal
+
 
   jpa:
     properties:
@@ -14,8 +17,9 @@ spring:
     hibernate:
       ddl-auto: create-drop
       show-sql: true
-  rabbitmq:
-    addresses: localhost:5672
+
+app:
+  jwtSecret: 442A472D4B6150645367566B59703373367639792442264528482B4D6251655468576D5A7134743777217A25432A462D4A404E635266556A586E327235753878
 
 eureka:
   client:
@@ -23,18 +27,5 @@ eureka:
       defaultZone : http://localhost:8761/eureka
     fetch-registry: true
     register-with-eureka: true
-server:
-  port: 8083
 
-management:
-  tracing:
-    sampling:
-      probability: 1.0
 
-rabbitmq:
-  exchanges:
-    internal : internal.exchange
-  queue:
-    notification: notification.queue
-  routing-keys:
-    internal-notification: internal.notification.routing-key
