@@ -14,13 +14,13 @@
         <module name="eureka-server" />
         <module name="rabbitmq" />
         <module name="food" />
-        <module name="users" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="amqp" target="17" />
       <module name="Food" target="17" />
       <module name="stock" target="17" />
+      <module name="users" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
