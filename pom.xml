@@ -14,7 +14,7 @@
   <url>http://www.example.com</url>
   <modules>
     <module>food</module>
-    <module>Order</module>
+    <module>order</module>
     <module>eureka-server</module>
     <module>clients</module>
     <module>notification</module>
