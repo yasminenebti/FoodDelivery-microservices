@@ -19,7 +19,9 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="amqp" target="17" />
+      <module name="authorization-server" target="17" />
       <module name="Food" target="17" />
+      <module name="Order" target="17" />
       <module name="stock" target="17" />
     </bytecodeTargetLevel>
   </component>

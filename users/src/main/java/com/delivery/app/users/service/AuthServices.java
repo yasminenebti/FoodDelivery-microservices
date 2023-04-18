@@ -23,6 +23,11 @@ public class AuthServices {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return AuthenticationResponse.builder()
+                    .message("User already exists")
+                    .build();
+        }
         var user = User
                 .builder()
                 .fullName(request.getFullName())
