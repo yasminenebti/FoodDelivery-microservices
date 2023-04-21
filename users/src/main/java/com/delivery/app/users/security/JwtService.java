@@ -5,9 +5,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Base64;
@@ -21,8 +23,20 @@ public class JwtService {
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 
-    public String getUserName(String jwtToken) {
-        return extractClaim(jwtToken, Claims::getSubject);
+    @Value("${app.jwtExpiration}")
+    private Long jwtExpiration;
+
+    public String getUserName(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+    //create, parse, and validate JWT tokens.
+    private Claims extractAllClaims(String token){ // represents the claims of a JWT token
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
+                .parseClaimsJws(token) //parses the provided JWT token into a Jws<Claims>(holds the signed JWT and its corresponding header and signature.)
+                .getBody();
     }
 
     public <T> T extractClaim(String token , Function<Claims , T> claimsResolver){
@@ -42,40 +56,30 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token , Claims::getExpiration);
-    }
+    private Date extractExpiration(String token) {return extractClaim(token , Claims::getExpiration);}
 
 
     public String generateToken(
-            Map<String , Object> extraClaims,
+            Map<String , Object> roles,
             UserDetails userDetails
     ) {
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
+                .setClaims(roles)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(
-                        new Date(System.currentTimeMillis() + 1000 * 60 * 24)
+                        new Date(System.currentTimeMillis() + jwtExpiration)
                 )
                 .signWith(getSignInKey() , SignatureAlgorithm.HS384)
                 .compact();
 
     }
 
-    //create, parse, and validate JWT tokens.
-    private Claims extractAllClaims(String token){ // represents the claims of a JWT token
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token) //parses the provided JWT token into a Jws<Claims>(holds the signed JWT and its corresponding header and signature.)
-                .getBody();
-    }
-
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
 }
