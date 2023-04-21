@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @RequiredArgsConstructor
 public class AuthServices {
@@ -28,9 +29,12 @@ public class AuthServices {
                     .message("User already exists")
                     .build();
         }
+
         var user = User
                 .builder()
                 .fullName(request.getFullName())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
@@ -40,8 +44,10 @@ public class AuthServices {
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)
+                .message("user created successfully")
                 .build();
     }
+
 
     public AuthenticationResponse authenticate(AuthRequest request) {
         authenticationManager.authenticate(
@@ -52,7 +58,7 @@ public class AuthServices {
         );
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().token(jwtToken).message("welcome back").build();
     }
 
 
