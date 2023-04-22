@@ -5,51 +5,52 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 
     @Value("${app.jwtExpiration}")
     private Long jwtExpiration;
+    private final CustomUserDetailsService customUserDetailsService;
 
     public String getUserName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-    //create, parse, and validate JWT tokens.
-    private Claims extractAllClaims(String token){ // represents the claims of a JWT token
+
+    private Claims extractAllClaims(String token){
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
-                .parseClaimsJws(token) //parses the provided JWT token into a Jws<Claims>(holds the signed JWT and its corresponding header and signature.)
+                .parseClaimsJws(token)
                 .getBody();
     }
 
     public <T> T extractClaim(String token , Function<Claims , T> claimsResolver){
        final Claims claims = extractAllClaims(token);
-       return claimsResolver.apply(claims); //extracts a specific claim and returns it a generic T
+       return claimsResolver.apply(claims);
     }
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>() , userDetails);
     }
 
-    public boolean isTokenValid(String token , UserDetails userDetails){
+    public boolean isTokenValid(String token){
         final String username = getUserName(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+        return userDetails != null && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

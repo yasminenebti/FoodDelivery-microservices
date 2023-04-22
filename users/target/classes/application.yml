@@ -17,6 +17,18 @@ spring:
     hibernate:
       ddl-auto: create-drop
       show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: yasminenebti@gmail.com
+    password: oyeydrvmtrhmzkcn
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
 app:
   jwtSecret: 442A472D4B6150645367566B59703373367639792442264528482B4D6251655468576D5A7134743777217A25432A462D4A404E635266556A586E327235753878

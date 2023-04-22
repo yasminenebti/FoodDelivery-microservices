@@ -1,6 +1,6 @@
 package com.delivery.app.users.config;
 
-import com.delivery.app.users.security.CustomUserDetailsService;
+
 import com.delivery.app.users.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**")      //whitelist this list but any other request should be authenticated
+                .requestMatchers("/api/v1/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider) //configured the authentication provider
-                .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class); //before the Spring Security internal UsernamePasswordAuthenticationFilter. We need access to the user identity to perform authentication/authorization, and its extraction happens inside the jwtAuthFilter based on the provided JWT token.
+                .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
