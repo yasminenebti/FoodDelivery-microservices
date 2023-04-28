@@ -3,13 +3,18 @@ package com.delivery.app.users.service;
 import com.delivery.app.users.dto.AuthRequest;
 import com.delivery.app.users.dto.AuthenticationResponse;
 import com.delivery.app.users.dto.RegisterRequest;
+import com.delivery.app.users.email.EmailSender;
 import com.delivery.app.users.entity.Role;
 import com.delivery.app.users.entity.User;
+import com.delivery.app.users.entity.token.VerificationToken;
+import com.delivery.app.users.entity.token.VerificationTokenService;
 import com.delivery.app.users.repository.UserRepository;
 import com.delivery.app.users.security.JwtService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +25,11 @@ public class AuthServices {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-
+    private final EmailSender emailSender;
+    private final VerificationTokenService verificationTokenService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegisterRequest request) throws MessagingException {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return AuthenticationResponse.builder()
                     .message("User already exists")
@@ -40,11 +46,13 @@ public class AuthServices {
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+
+        String verificationToken = verificationTokenService.generateVerificationToken(user.getUsername());
+        String link = "http://localhost:8084/api/v1/auth/validateAccount/" + verificationToken;
+        emailSender.sendEmailVerification(request.getEmail(),createHtmlEmail(request.getFullName() , link));
         return AuthenticationResponse
                 .builder()
-                .token(jwtToken)
-                .message("user created successfully")
+                .message("user created successfully , you need to verify account")
                 .build();
     }
 
@@ -58,7 +66,42 @@ public class AuthServices {
         );
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).message("welcome back").build();
+        return AuthenticationResponse.builder().message(jwtToken).build();
+    }
+
+    public String validateUserAccount(String token){
+        VerificationToken verificationToken = verificationTokenService.getToken(token).orElseThrow(()->new IllegalAccessError("token not found"));
+        String username = verificationToken.getUsername();
+        User user = userRepository.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("user not found"));
+        user.setEnabled(true);
+        userRepository.save(user);
+        return "account confirmed";
+    }
+
+    public String validateToken(String token){
+        if (jwtService.isTokenValid(token)){
+            return "token valid";
+        } else {
+            return "invalid token";
+        }
+    }
+
+
+
+    public String createHtmlEmail(String name, String link) {
+        String html = "<html>" +
+                "<head>" +
+                "<style type=\"text/css\">" +
+                "/* Your CSS code here */" +
+                "</style>" +
+                "</head>" +
+                "<body>" +
+                "<p>Dear " + name + ",</p>" +
+                "<p>Please click on the link below to verify your account:</p>" +
+                "<a href='" + link + "'>Verify Account</a>" +
+                "</body>" +
+                "</html>";
+        return html;
     }
 
 

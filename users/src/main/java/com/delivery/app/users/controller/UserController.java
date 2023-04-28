@@ -4,12 +4,11 @@ import com.delivery.app.users.dto.AuthRequest;
 import com.delivery.app.users.dto.AuthenticationResponse;
 import com.delivery.app.users.dto.RegisterRequest;
 import com.delivery.app.users.service.AuthServices;
+import jakarta.mail.MessagingException;
+import jakarta.ws.rs.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -19,8 +18,7 @@ public class UserController {
     private final AuthServices authServices;
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
-            @RequestBody RegisterRequest request)
-    {
+            @RequestBody RegisterRequest request) throws MessagingException {
         return ResponseEntity.ok(authServices.register(request));
     }
 
@@ -29,5 +27,15 @@ public class UserController {
             @RequestBody AuthRequest request)
     {
         return ResponseEntity.ok(authServices.authenticate(request));
+    }
+
+    @GetMapping("/validateAccount/{token}")
+    public ResponseEntity<String> confirmUserAccount(@PathVariable String token){
+        return ResponseEntity.ok(authServices.validateUserAccount(token));
+    }
+
+    @GetMapping("/validateToken/{token}")
+    public ResponseEntity<String> validateToken(@PathVariable String token){
+        return ResponseEntity.ok(authServices.validateToken(token));
     }
 }
