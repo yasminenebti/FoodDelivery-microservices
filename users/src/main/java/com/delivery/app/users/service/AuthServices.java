@@ -10,6 +10,7 @@ import com.delivery.app.users.entity.token.VerificationToken;
 import com.delivery.app.users.entity.token.VerificationTokenService;
 import com.delivery.app.users.repository.UserRepository;
 import com.delivery.app.users.security.JwtService;
+import com.delivery.clients.users.UserRequest;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -78,12 +79,13 @@ public class AuthServices {
         return "account confirmed";
     }
 
-    public String validateToken(String token){
+    public UserRequest validateToken(String token){
         if (jwtService.isTokenValid(token)){
-            return "token valid";
-        } else {
-            return "invalid token";
-        }
+            String username = jwtService.getUserName(token);
+            User user = userRepository.findByEmail(username).orElseThrow(()-> new UsernameNotFoundException("user not found"));
+            UserRequest userRequest = new UserRequest(user.getId() , user.getUsername());
+            return userRequest;
+        } throw new RuntimeException("Invalid Token");
     }
 
 

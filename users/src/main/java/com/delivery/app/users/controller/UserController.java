@@ -4,6 +4,7 @@ import com.delivery.app.users.dto.AuthRequest;
 import com.delivery.app.users.dto.AuthenticationResponse;
 import com.delivery.app.users.dto.RegisterRequest;
 import com.delivery.app.users.service.AuthServices;
+import com.delivery.clients.users.UserRequest;
 import jakarta.mail.MessagingException;
 import jakarta.ws.rs.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/validateToken/{token}")
-    public ResponseEntity<String> validateToken(@PathVariable String token){
+    public ResponseEntity<UserRequest> validateToken(@PathVariable String token){
         return ResponseEntity.ok(authServices.validateToken(token));
     }
 }

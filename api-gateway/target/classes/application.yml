@@ -1,6 +1,5 @@
 server:
   port: 8084
-
 spring:
   application:
     name: api-gateway
@@ -12,26 +11,38 @@ spring:
           uri: lb://FOODITEM
           predicates:
             - Path=/api/v1/food/**
+
+
         - id: category
           uri: lb://FOODITEM
           predicates:
             - Path=/api/v2/category/**
+
+
         - id: restaurant
           uri: lb://FOODITEM
           predicates:
             - Path=/api/v2/restaurant/**
+
         - id: order
           uri: lb://ORDER
           predicates:
             - Path=/api/v3/orders/**
+          filters:
+            - name: AuthFilter
+
+
         - id: notification
           uri: lb://NOTIFICATION
           predicates:
             - Path=notification/**
+
+
         - id : users
           uri : lb://USERS
           predicates:
             - Path=/api/v1/auth/**
+
 
 
 
