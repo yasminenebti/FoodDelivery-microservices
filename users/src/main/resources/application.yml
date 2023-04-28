@@ -22,12 +22,14 @@ spring:
     port: 587
     username: noreplyn789@gmail.com
     password: ubvrtwoxaazrdkdw
+
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+
 
 app:
   jwtSecret: 442A472D4B6150645367566B59703373367639792442264528482B4D6251655468576D5A7134743777217A25432A462D4A404E635266556A586E327235753878

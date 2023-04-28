@@ -10,9 +10,12 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class VerificationTokenService {
+
+
     private final VerificationRepo verificationRepo;
     public void saveVerificationToken(VerificationToken token){
         verificationRepo.save(token);
+
     }
 
     public String generateVerificationToken(String username){
@@ -26,7 +29,10 @@ public class VerificationTokenService {
         verificationRepo.save(verificationToken);
         return verificationToken.getToken();
     }
+
     public Optional<VerificationToken> getToken(String token){
         return verificationRepo.findByToken(token);
+
     }
+
 }

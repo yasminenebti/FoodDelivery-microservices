@@ -19,7 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 public class AuthServices {
@@ -28,6 +27,7 @@ public class AuthServices {
     private final JwtService jwtService;
     private final EmailSender emailSender;
     private final VerificationTokenService verificationTokenService;
+
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) throws MessagingException {
@@ -45,12 +45,15 @@ public class AuthServices {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
+                .enabled(false)
                 .build();
         userRepository.save(user);
 
         String verificationToken = verificationTokenService.generateVerificationToken(user.getUsername());
+
         String link = "http://localhost:8084/api/v1/auth/validateAccount/" + verificationToken;
         emailSender.sendEmailVerification(request.getEmail(),createHtmlEmail(request.getFullName() , link));
+
         return AuthenticationResponse
                 .builder()
                 .message("user created successfully , you need to verify account")
@@ -104,7 +107,10 @@ public class AuthServices {
                 "</body>" +
                 "</html>";
         return html;
+
     }
+
+
 
 
 }

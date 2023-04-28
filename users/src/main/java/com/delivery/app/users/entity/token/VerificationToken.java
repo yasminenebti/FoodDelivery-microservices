@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @NoArgsConstructor

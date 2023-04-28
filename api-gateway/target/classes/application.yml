@@ -13,6 +13,7 @@ spring:
             - Path=/api/v1/food/**
 
 
+
         - id: category
           uri: lb://FOODITEM
           predicates:
@@ -36,6 +37,8 @@ spring:
           uri: lb://NOTIFICATION
           predicates:
             - Path=notification/**
+          filters:
+            - name: AuthFilter
 
 
         - id : users

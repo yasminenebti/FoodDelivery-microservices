@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EmailSenderService implements EmailSender{
+public class EmailSenderService implements EmailSender {
     private final JavaMailSender javaMailSender;
     @Value("${spring.mail.username}")
     private String mailSender;
@@ -25,4 +25,5 @@ public class EmailSenderService implements EmailSender{
         mimeMessageHelper.setFrom(mailSender);
         javaMailSender.send(mimeMessage);
     }
+
 }
