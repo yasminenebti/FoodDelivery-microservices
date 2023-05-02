@@ -13,10 +13,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class OrderItems {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
     private Integer restaurantId;
     private String name;
     private Double price;
     private Integer quantity;
+
+    private Integer foodId;
 }

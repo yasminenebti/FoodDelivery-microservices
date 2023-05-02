@@ -18,8 +18,10 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void addOrder(@RequestBody OrderItemsRequest orderItemsRequest){
-          orderService.addOrder(orderItemsRequest);
+    public void addOrder(@RequestBody OrderItemsRequest orderItemsRequest ,
+                         @RequestHeader("x-auth-user-id") Integer userId
+    ){
+          orderService.addOrder(orderItemsRequest , userId);
     }
 
     @GetMapping
@@ -52,5 +54,14 @@ public class OrderController {
             @PathVariable("item") Integer item
     ) {
         return orderService.decreaseQuantity(orderId,item);
+    }
+
+    @PutMapping("/{orderId}/deleteItem/{item}")
+    @ResponseStatus(HttpStatus.OK)
+    public Order deleteItemFromOrder(
+            @PathVariable("orderId") Integer orderId,
+            @PathVariable("item") Integer item
+    ) {
+        return orderService.deleteItemFromOrder(orderId,item);
     }
 }

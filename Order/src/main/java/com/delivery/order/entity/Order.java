@@ -1,5 +1,6 @@
 package com.delivery.order.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,10 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItems> orderItems ;
@@ -32,6 +31,9 @@ public class Order {
     private double total;
 
     private String address;
+
+
+    private Integer userId;
 
     private Boolean isCheckout ;
 

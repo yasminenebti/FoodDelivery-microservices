@@ -8,6 +8,7 @@ import lombok.*;
 public class OrderItemsRequest {
 
     private Integer id;
+    private Integer foodId;
     private Double price;
     private Integer quantity;
     private Integer restaurantId;

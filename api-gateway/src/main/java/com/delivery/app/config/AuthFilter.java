@@ -38,7 +38,6 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
                                .header("x-auth-user-name", String.valueOf(userRequest.name()));
                      return exchange;
                     }).flatMap(chain::filter);
-
         });
     }
 

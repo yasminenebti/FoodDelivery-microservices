@@ -64,6 +64,6 @@ public class FoodService {
         if (foodItem.isEmpty()) {
             throw  new IllegalStateException("foodItem with id " + id + " does not exist");
         }
-        return new FoodItemResponse(foodItem.get().getName(),foodItem.get().getPrice());
+        return new FoodItemResponse( foodItem.get().getId() , foodItem.get().getName(),foodItem.get().getPrice());
     }
 }
