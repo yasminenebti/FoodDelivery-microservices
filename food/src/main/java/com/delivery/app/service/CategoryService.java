@@ -1,6 +1,7 @@
 package com.delivery.app.service;
 
 import com.delivery.app.entity.Category;
+import com.delivery.app.entity.FoodItem;
 import com.delivery.app.exception.ResourceNotFoundException;
 import com.delivery.app.repository.CategoryRepository;
 import com.delivery.app.validation.ObjectValidator;
@@ -50,6 +51,7 @@ public class CategoryService {
         }
         categoryRepository.deleteById(id);
     }
+
 
 
 }

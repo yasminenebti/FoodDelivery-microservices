@@ -1,12 +1,11 @@
 package com.delivery.app.entity;
 
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -17,19 +16,25 @@ public class FoodItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer Id;
-
+    private Integer id;
+    @NotNull
+    @NotEmpty
     private String name ;
+    @NotNull
+    @NotEmpty
     private String description;
     private String image;
+    @NotNull
+    @NotEmpty
     private double price;
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", referencedColumnName = "id" ,nullable = false)
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    private Restaurant restaurant;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id", referencedColumnName = "id",nullable = false)
+    private Restaurant restaurant;
 
 }
