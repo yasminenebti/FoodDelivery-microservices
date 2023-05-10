@@ -7,7 +7,6 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <!--<module name="Order" />-->
         <module name="notification" />
         <module name="clients" />
         <module name="api-gateway" />
@@ -20,11 +19,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="amqp" target="17" />
-      <!--<module name="authorization-server" target="17" />-->
       <module name="Food" target="17" />
-      <!--<module name="order" target="17" />-->
       <module name="stock" target="17" />
-      <!--<module name="users" target="17" />-->
     </bytecodeTargetLevel>
   </component>
 </project>

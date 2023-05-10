@@ -18,6 +18,11 @@ import java.util.List;
 public class FoodController {
 
     private final FoodService foodService;
+
+    @GetMapping("/message")
+    public String Hello(){
+        return "your application is successfully deployed on Azure";
+    }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void addFood(@RequestBody FoodRequest foodRequest){
