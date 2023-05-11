@@ -24,8 +24,7 @@ public class FoodItem {
     @NotEmpty
     private String description;
     private String image;
-    @NotNull
-    @NotEmpty
+
     private double price;
 
     @ManyToOne(fetch = FetchType.LAZY)

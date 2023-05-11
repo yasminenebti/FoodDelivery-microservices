@@ -26,8 +26,7 @@ public class Restaurant {
     @NotEmpty
     private String address;
 
-    @NotNull
-    @NotEmpty
+
     private Integer phoneNumber;
 
     @JsonIgnore
