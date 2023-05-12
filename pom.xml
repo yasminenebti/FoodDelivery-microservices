@@ -21,6 +21,7 @@
     <module>api-gateway</module>
     <module>rabbitmq</module>
     <module>users</module>
+    <module>payment</module>
   </modules>
 
   <properties>

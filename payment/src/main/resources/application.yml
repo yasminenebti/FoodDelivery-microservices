@@ -1,0 +1,40 @@
+paypal:
+  clientId: AYbXwV2K3YjI4IdbnfgD6e_kd3aWvU6eAimtX-dGGKjUHF66VrGQtT-Szjh3P8EnRsS3ZbZf5M8b8tTB
+  clientSecret: EPEt4Yo3_s51CX2BUm11sgNU4JRbRp5JlhumRN528-PIcPRHVN-WXeRB_P3Rn5tzMLC0RRAgfkxc2D1a
+  mode: sandbox
+
+spring:
+  application:
+    name: payment
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payment
+    username: delivery
+    password: passfinal
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create-drop
+      show-sql: true
+  rabbitmq:
+    addresses: localhost:5672
+
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+
+server:
+  port: 9090
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+
+
+

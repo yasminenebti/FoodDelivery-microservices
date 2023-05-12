@@ -10,6 +10,7 @@
         <module name="notification" />
         <module name="clients" />
         <module name="api-gateway" />
+        <module name="payment" />
         <module name="eureka-server" />
         <module name="rabbitmq" />
         <module name="food" />
